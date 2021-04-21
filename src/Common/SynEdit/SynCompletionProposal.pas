@@ -45,7 +45,7 @@ Known Issues:
 unit SynCompletionProposal;
 {$ENDIF}
 
-{$I SynEdit.Inc}
+{$I SynEdit.inc}
 
 interface
 
@@ -207,7 +207,6 @@ type
     function IsWordBreakChar(AChar: WideChar): Boolean;
   protected
     procedure DoKeyPressW(Key: WideChar);
-    function DoHandleStyleMessage(var Message: TMessage): Boolean; override;
     procedure KeyDown(var Key: Word; Shift: TShiftState); override;
     procedure KeyPress(var Key: Char); override;
     procedure KeyPressW(var Key: WideChar); virtual;
@@ -1456,14 +1455,6 @@ begin
     KeyPressW(Key);
 end;
 
-function TSynBaseCompletionProposalForm.DoHandleStyleMessage(var Message: TMessage): Boolean;
-begin
-  if Message.Msg=WM_NCHITTEST then
-    Result := False
-  else
-    Result := inherited;
-end;
-
 procedure TSynBaseCompletionProposalForm.KeyPressW(var Key: WideChar);
 begin
   if DisplayType = ctCode then
@@ -1804,7 +1795,7 @@ var
         CompareString := StripFormatCommands(CompareString);
     end;
 
-    if fMatchTextAnywhere then
+    if FMatchTextAnywhere then
     begin
       if Value <> '' then
       begin
@@ -1860,11 +1851,11 @@ begin
     Exit;
   if FMatchText then
   begin
-    if fMatchTextAnywhere then
+    if FMatchTextAnywhere then
       Position := 0;
     RecalcList;
     AdjustScrollBarPosition;
-    if not fMatchTextAnywhere then
+    if not FMatchTextAnywhere then
       Position := 0;
     
     if Visible and Assigned(FOnChangePosition) and (DisplayType = ctCode) then
@@ -2807,6 +2798,7 @@ begin
     Form.UsePrettyText := scoUsePrettyText in Value;
     Form.UseInsertList := scoUseInsertList in Value;
     Form.MatchText := scoLimitToMatchedText in Value;
+    Form.MatchTextAnywhere := scoLimitToMatchedTextAnywhere in Value;
     Form.CompleteWithTab := scoCompleteWithTab in Value;
     Form.CompleteWithEnter := scoCompleteWithEnter in Value;
   end;
